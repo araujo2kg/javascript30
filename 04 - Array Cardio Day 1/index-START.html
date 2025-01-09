@@ -38,28 +38,104 @@
     
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    {
+        const newInventors = inventors.filter(inventor => (inventor.year > 1499 && inventor.year < 1600));
+        // console.table(newInventors);
+    }
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    {
+        const inventorsNames = inventors.map(inventor => inventor.first + " " + inventor.last);
+        //console.table(inventorsNames);
+    }
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    {
+        const sortedInventors = inventors.sort((a, b) => a.year - b.year);
+        //console.table(sortedInventors);
+        //  (a, b) => a.year > b.year ? 1 : -1 || can be used too
+    }
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    {
+        const yearsLived = inventors.reduce((total, inventor) => total + (inventor.passed - inventor.year), 0)
+        //console.log(yearsLived);
+    }
 
     // 5. Sort the inventors by years lived
+    {
+        const sortYearsLived = inventors.sort((a, b) => (a.passed - a.year) - (b.passed - b.year));
+        // console.table(sortYearsLived);
+
+
+        // Including the number of years lived
+        const sortedWithYears = sortYearsLived.reduce((obj, current) => {
+            const newObj = {...current, yearsLived: (current.passed - current.year)};
+            obj.push(newObj);
+            return obj;
+        }, [])
+        // console.table(sortedWithYears);
+    }
+
+    {
+        const newInventors = inventors.reduce((obj, currentElement) => {
+            obj.push({
+                "name":currentElement.first + " " + currentElement.last,
+                "yearsLived":currentElement.passed - currentElement.year,
+            });
+            return obj;
+        }, [])
+        // console.table(newInventors);
+    }
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+    {
+        let boulevardsList = [];
+        const category = document.querySelectorAll(".mw-category-group");
+        // NodeLists contain the forEach array method
+        category.forEach(categoryElement => {
+            const links = categoryElement.querySelectorAll("a");
+            links.forEach(link => {
+                if (link.title.includes("de")){
+                    boulevardsList.push(link.title);
+                }
+            });
+        });
+    }
+    // Simpler way
+    {
+        const links = [...document.querySelectorAll(".mw-category a")];
+        let boulevardDe = links.map(link => link.title).filter(name => name.includes("de"));
+    }
 
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    {
+        // Sort works in place, do not return a new array
+        const sortedPeople = [...people].sort((a, b) => a.localeCompare(b)); // Full name, conside special characters
+        const sortedPeople2 = [...people].sort(); // Full name, ascii values
+        const sortedPeople3 = [...people].sort((a, b) => a.split(", ")[0].localeCompare(b.split(", ")[0])); // Last name, consider special characters
+        const sortedFirstName = [...people].sort((a, b) => a.split(",")[1].localeCompare(b.split(",")[1])); // First name
+        // console.table(sortedFirstName); 
+    }
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+
+    {
+        let sumOfUnique = data.reduce((obj, string) => {
+            obj[string] ? obj[string]++ : obj[string] = 1;
+            return obj;
+        }, {});
+
+        console.log(sumOfUnique);
+    }
 
   </script>
 </body>
